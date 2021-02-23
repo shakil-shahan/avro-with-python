@@ -1,6 +1,18 @@
+import json
 import avro.schema
 from avro.datafile import DataFileReader, DataFileWriter
 from avro.io import DatumReader, DatumWriter
+
+#####################################################################
+# =================== Input File Location/Path Here ================
+
+filePath = './avroData/result.avro'
+
+# Example
+# const filePath = '/home/root/collection/file.avro';
+
+# =================== Input File Location/Path Here ================
+#####################################################################
 
 # Define schema
 schema = avro.schema.parse("""{
@@ -36,7 +48,6 @@ schema = avro.schema.parse("""{
     ]
 }""")
 
-
 # write a file
 writer = DataFileWriter(
     open("./avroData/result.avro", "wb"), DatumWriter(), schema)
@@ -65,7 +76,9 @@ writer.append({
 writer.close()
 
 # read a file
-reader = DataFileReader(open("./avroData/result.avro", "rb"), DatumReader())
+reader = DataFileReader(open(filePath, "rb"), DatumReader())
 for data in reader:
     print(data)
+    with open("./jsonData/result.json", "w") as jsonFile:
+        json.dump(data, jsonFile, indent=4)
 reader.close()
